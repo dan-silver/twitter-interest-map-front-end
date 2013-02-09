@@ -1,5 +1,11 @@
 extends layout
 
+block head
+  script(type="text/javascript", src="http://www.google.com/jsapi")
+  script(type="text/javascript", src="/javascripts/map.js")
+
 block content
-  h1= title
-  p Welcome to #{title}
+  p Data has been hardcoded for the United States and Missouri. We should eventually ajax in data as people click on different regions.
+  #visualization
+  button#zoom-out.hide.btn.btn-info(onclick="zoomOut()") Zoom Out
+  
