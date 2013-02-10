@@ -7,7 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-	, db = require('./db')
+  , db = require('./db')
   , path = require('path');
 
 var app = express();
@@ -29,6 +29,23 @@ app.configure(function(){
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+});
+
+
+//ex http://localhost:3000/510c2bd798df0ab8870010c9/state/United%20States
+app.get('/:interest_id/:type/:location_parent', function(req, res) {
+	var options = {type: req.params.type,interest: req.params.interest_id};
+	if (req.params.location_parent) {
+		options.location_parent = req.params.location_parent;
+	}
+	db.interest_locations.find(options, 'location count', function (err, data) {
+		res.json(data);
+	});
+});
+app.get('/:interest_id/countries', function(req, res) {
+	db.interest_locations.find({interest: req.params.interest_id, type: 'country'}, 'location count', function (err, data) {
+		res.json(data);
+	});
 });
 
 app.get('/', routes.index);
