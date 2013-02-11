@@ -42,9 +42,19 @@ app.get('/:interest_id/:type/:location_parent', function(req, res) {
 		res.json(data);
 	});
 });
-app.get('/:interest_id/countries', function(req, res) {
+app.get('/:interest_id', function(req, res) {
 	db.interest_locations.find({interest: req.params.interest_id, type: 'country'}, 'location count', function (err, data) {
-		res.json(data);
+		var returnData = {
+			cols:[{id:"country",label:"Country",type:"string"},
+					  {id:"count",label:"User Count",type:"number"}
+					 ],
+			 rows:[]
+		};
+		for (var key in data) {
+			var obj = data[key];
+			returnData.rows.push({c:[{v:obj.location},{v:obj.count}]});
+		}
+		res.json(returnData);
 	});
 });
 

@@ -51,35 +51,32 @@ var geochart, data=[], options, zoomLevel, country, state;
         zoomLevel = 2;
       }
     }
-    
-    google.setOnLoadCallback(function() {
-        data['world'] = google.visualization.arrayToDataTable([
-        ['Country', 'User Count'],
-        ['Germany', 200],
-        ['United States', 300],
-        ['Brazil', 400],
-        ['Canada', 500],
-        ['France', 600],
-        ['RU', 700],
-        ['Great Britain', 50]
-      ]);  
-      data['US'] = google.visualization.arrayToDataTable([
-        ['state', 'User Count'],
-        ['Missouri', 200],
-        ['IL', 300],
-        ['CA', 400],
-        ['FL', 500],
-        ['VA', 600],
-        ['AL', 700]
-      ]);
-      data['US-MO'] = google.visualization.arrayToDataTable([
-        ['City', 'User Count'],
-        ['Jefferson City', 200],
-        ['Columbia', 300],
-        ['St. Louis', 400],
-        ['Chesterfield', 500],
-        ['Kirkwood', 600],
-        ['Boonville', 700]
-      ]);
-      drawVisualization();
-    });
+
+	var countryData;
+	$(function() {
+		google.setOnLoadCallback(function() {
+			$.get("/510c2bd798df0ab8870010c9", function(returnedData) {
+			countryData = returnedData;
+			data['world'] = new google.visualization.DataTable(countryData);
+			data['US'] = google.visualization.arrayToDataTable([
+				['state', 'User Count'],
+				['Missouri', 200],
+				['IL', 300],
+				['CA', 400],
+				['FL', 500],
+				['VA', 600],
+				['AL', 700]
+			]);
+		  data['US-MO'] = google.visualization.arrayToDataTable([
+			['City', 'User Count'],
+			['Jefferson City', 200],
+			['Columbia', 300],
+			['St. Louis', 400],
+			['Chesterfield', 500],
+			['Kirkwood', 600],
+			['Boonville', 700]
+		  ]);
+		  drawVisualization();
+		 });
+		});
+	});
