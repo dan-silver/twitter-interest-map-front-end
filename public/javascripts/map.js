@@ -24,10 +24,9 @@ var geochart, data=[], options, zoomLevel, country, state;
           if (zoomLevel == 2) {
             var type = 'state'
             var location = country;
-          }
-          else if (zoomLevel == 3) {
+          } else if (zoomLevel == 3) {
             var type = 'city'
-            var location = state
+            var location = state;
           }
           $.get("/510c2bd798df0ab8870010c9/"+type+"/"+location, function(returnedData) {
               console.log(returnedData);
