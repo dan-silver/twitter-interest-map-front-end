@@ -5,6 +5,11 @@ block head
   script(type="text/javascript", src="/javascripts/map.js")
 
 block content
+  h3 Interests in the database:
+  ul
+   each interest in interests
+    li= interest.name
+  h3 Map for Node.js:
   p Country data is loaded for one interest and data for the United States and Missouri data is still hardcoded.
   #visualization
   button#zoom-out.hide.btn.btn-info(onclick="zoomOut()") Zoom Out

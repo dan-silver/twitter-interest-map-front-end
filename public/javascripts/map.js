@@ -8,7 +8,6 @@ var geochart, data=[], options, zoomLevel, country, state;
       
       google.visualization.events.addListener(
       geochart, 'regionClick', function(e) {
-        if (data[e.region] ) {
         options.region =  e.region;
         options.resolution = 'provinces';
           if (e.region.indexOf("-") != -1) { //"US-MO" vs "US"
@@ -22,13 +21,19 @@ var geochart, data=[], options, zoomLevel, country, state;
             console.log("Clicked on country %s", country);
           }
           //console.log("Your zoomLevel is %d", zoomLevel);
-          geochart.draw(data[e.region] , options);
+          if (zoomLevel == 2) {
+            var type = 'state'
+            var location = country;
+          }
+          else if (zoomLevel == 3) var type = 'city'
+          $.get("/510c2bd798df0ab8870010c9/"+type+"/"+location, function(returnedData) {
+              console.log(returnedData);
+              data[e.region] = new google.visualization.DataTable(returnedData);
+              geochart.draw(data[e.region], options);
+            });
           if (zoomLevel > 1) {
             $('#zoom-out').fadeIn();
           }
-        } else {
-          console.log("No data available for this region");
-        }
       });
       initalZoom();
     }
@@ -52,13 +57,11 @@ var geochart, data=[], options, zoomLevel, country, state;
       }
     }
 
-	var countryData;
 	$(function() {
 		google.setOnLoadCallback(function() {
 			$.get("/510c2bd798df0ab8870010c9", function(returnedData) {
-			countryData = returnedData;
-			data['world'] = new google.visualization.DataTable(countryData);
-			data['US'] = google.visualization.arrayToDataTable([
+			data['world'] = new google.visualization.DataTable(returnedData);
+			/**data['US'] = google.visualization.arrayToDataTable([
 				['state', 'User Count'],
 				['Missouri', 200],
 				['IL', 300],
@@ -75,7 +78,7 @@ var geochart, data=[], options, zoomLevel, country, state;
 			['Chesterfield', 500],
 			['Kirkwood', 600],
 			['Boonville', 700]
-		  ]);
+		  ]);**/
 		  drawVisualization();
 		 });
 		});

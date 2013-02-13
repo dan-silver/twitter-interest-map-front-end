@@ -1,8 +1,7 @@
-
-/*
- * GET home page.
- */
+var  db = require('../db')
 
 exports.index = function(req, res) {
-	res.render('index', { title: 'Testing out Geomaps'});
+	 db.interest.find(function (err, interests) {
+    res.render('index', { title: 'Testing out Geomaps', interests: interests});
+  });
 };
