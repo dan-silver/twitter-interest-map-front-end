@@ -37,7 +37,7 @@ app.get('/:interest_id/:type/:location_parent', function(req, res) {
   db.interest_locations.find({interest: req.params.interest_id, type: req.params.type, location_parent: req.params.location_parent}, 'location count', function (err, data) {
     console.log(data);
 		var returnData = {
-			cols:[{id:"country",label:"State",type:"string"},
+			cols:[{id:req.params.type,label:req.params.type,type:"string"},
 					  {id:"count",label:"User Count",type:"number"}
 					 ],
 			 rows:[]
