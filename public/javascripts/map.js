@@ -45,7 +45,7 @@ var geochart, data=[], options, zoomLevel, country, state;
             geochart.draw(data[e.region], options);
         }
         if (zoomLevel > 1) {
-          $('#zoom-out').fadeIn();
+          $('#zoom-out').css("opacity", 1);
         }
       });
       initalZoom();
@@ -55,7 +55,7 @@ var geochart, data=[], options, zoomLevel, country, state;
       zoomLevel=1;
       defaultOptions();
       geochart.draw(data['world'], options);
-      $('#zoom-out').fadeOut();
+      $('#zoom-out').css("opacity", 0);
     };
     
     function zoomOut() {

@@ -8,8 +8,8 @@ block head
 
 block content
   h3.mapHeading Human Interest in #{currentInterest.name}
+  button#zoom-out.btn.btn-info(onclick="zoomOut()") Zoom Out
   #visualization
-  button#zoom-out.hide.btn.btn-info(onclick="zoomOut()") Zoom Out
   .row.subMap
     .span5
       #disqus_thread

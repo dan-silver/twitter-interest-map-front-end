@@ -4,14 +4,21 @@ body {
 }
 .siteTitle {
   text-decoration: none !important;
-  transition: color 0.2s;
-  -webkit-transition: color 0.2s;
-  -moz-transition: color 0.2s;
-  -o-transition: color 0.2s;
 }
 body {
   padding-top: 20px;
   padding-bottom: 60px;
+}
+#zoom-out {
+  position: relative;
+  top: 57px;
+  left: 720px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s;
+  -webkit-transition: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
 }
 .mapHeading {
   font-size: 55px;
