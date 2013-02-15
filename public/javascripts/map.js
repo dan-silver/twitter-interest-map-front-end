@@ -8,34 +8,45 @@ var geochart, data=[], options, zoomLevel, country, state;
       
       google.visualization.events.addListener(
       geochart, 'regionClick', function(e) {
-        options.region =  e.region;
-        options.resolution = 'provinces';
-          if (e.region.indexOf("-") != -1) { //"US-MO" vs "US"
-            options.displayMode = 'markers';
-            zoomLevel = 3;
-            state = e.region;
-            console.log("Clicked on state %s", state);
-          } else {
-            zoomLevel = 2;
-            country = e.region;
-            console.log("Clicked on country %s", country);
-          }
-          //console.log("Your zoomLevel is %d", zoomLevel);
-          if (zoomLevel == 2) {
-            var type = 'state'
-            var location = country;
-          } else if (zoomLevel == 3) {
-            var type = 'city'
-            var location = state;
-          }
+        var type, location
+        options.region = e.region
+        if (e.region.indexOf("-") != -1) { //clicked on a state, view cities (US only)
+          console.log("Clicked on state %s", e.region);
+          zoomLevel = 3
+          options.resolution = 'provinces'
+          options.displayMode = 'markers'
+          state = e.region
+          type = 'city'
+          location = state
+        } else if (e.region == 'US') { //clicked on the US, display states
+          console.log("Clicked on country %s", e.region);
+          zoomLevel = 2
+          options.resolution = 'provinces'
+          options.displayMode = 'regions'
+          country = e.region
+          type = 'state'
+          location = country
+        } else { //clicked on a country (NOT US), display top cities
+          console.log("Clicked on not US country: %s", e.region)
+          zoomLevel = 2
+          options.resolution = 'countries'
+          options.displayMode = 'markers'
+          country = e.region
+          type = 'city'
+          location = country
+        }
+        if (!data[e.region]) {
           $.get("/510c2bd798df0ab8870010c9/"+type+"/"+location, function(returnedData) {
-              console.log(returnedData);
-              data[e.region] = new google.visualization.DataTable(returnedData);
-              geochart.draw(data[e.region], options);
-            });
-          if (zoomLevel > 1) {
-            $('#zoom-out').fadeIn();
-          }
+            data[e.region] = new google.visualization.DataTable(returnedData);
+            geochart.draw(data[e.region], options);
+            console.log(returnedData);
+          });
+        } else {
+            geochart.draw(data[e.region], options);
+        }
+        if (zoomLevel > 1) {
+          $('#zoom-out').fadeIn();
+        }
       });
       initalZoom();
     }
@@ -63,24 +74,6 @@ var geochart, data=[], options, zoomLevel, country, state;
 		google.setOnLoadCallback(function() {
 			$.get("/510c2bd798df0ab8870010c9", function(returnedData) {
 			data['world'] = new google.visualization.DataTable(returnedData);
-			/**data['US'] = google.visualization.arrayToDataTable([
-				['state', 'User Count'],
-				['Missouri', 200],
-				['IL', 300],
-				['CA', 400],
-				['FL', 500],
-				['VA', 600],
-				['AL', 700]
-			]);
-		  data['US-MO'] = google.visualization.arrayToDataTable([
-			['City', 'User Count'],
-			['Jefferson City', 200],
-			['Columbia', 300],
-			['St. Louis', 400],
-			['Chesterfield', 500],
-			['Kirkwood', 600],
-			['Boonville', 700]
-		  ]);**/
 		  drawVisualization();
 		 });
 		});

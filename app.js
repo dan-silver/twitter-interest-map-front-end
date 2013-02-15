@@ -33,9 +33,7 @@ app.configure('development', function(){
 
 //ex http://localhost:3000/510c2bd798df0ab8870010c9/state/US
 app.get('/:interest_id/:type/:location_parent', function(req, res) {
-  console.log(req.params.location_parent);
   db.interest_locations.find({interest: req.params.interest_id, type: req.params.type, location_parent: req.params.location_parent}, 'location count', function (err, data) {
-    console.log(data);
 		var returnData = {
 			cols:[{id:req.params.type,label:req.params.type,type:"string"},
 					  {id:"count",label:"User Count",type:"number"}
