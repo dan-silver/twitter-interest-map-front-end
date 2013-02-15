@@ -1,10 +1,7 @@
 extends layout
 
-block head
-  script(type="text/javascript", src="http://www.google.com/jsapi")
-  script(type="text/javascript", src="/javascripts/map.js")
-
 block content
-  h3 Interests:
-  each interest in interests
-   a(href='/' + interest.name + '/map')= interest.name
+  .jumbotron
+    h1 Explore Human Interests
+    p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+    a.btn.btn-large.btn-success(href="/explore") Explore the Data

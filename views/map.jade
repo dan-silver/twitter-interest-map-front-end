@@ -7,9 +7,17 @@ block head
   script(type="text/javascript", src="/javascripts/map.js")
 
 block content
-  h3 Interests:
-  each interest in interests
-   a(href='/' + interest.name + '/map')= interest.name
-  h3 Human Interest in #{currentInterest.name}
+  h3.mapHeading Human Interest in #{currentInterest.name}
   #visualization
   button#zoom-out.hide.btn.btn-info(onclick="zoomOut()") Zoom Out
+  .row.subMap
+    .span5
+      #disqus_thread
+      script(type="text/javascript")
+        var disqus_shortname = 'testt234dfg';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    .span3 p Maybe display some info about the interest and a link to view the raw data (table format)?

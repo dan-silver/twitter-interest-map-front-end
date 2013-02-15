@@ -1,0 +1,9 @@
+extends layout
+
+block head
+
+block content
+  p We need an awesome way for people to explore the different interests we have, something more than just a list of interest names.
+  h3 Interests:
+  each interest in interests
+   a(href='/' + interest.name + '/map')= interest.name

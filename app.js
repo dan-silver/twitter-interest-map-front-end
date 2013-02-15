@@ -47,8 +47,9 @@ app.get('/:interest_id/:type/:location_parent', function(req, res) {
 		res.json(returnData);
 	});
 });
+app.get('/explore', routes.explore);
 app.get('/:interest_name/map', routes.map);
-app.get('/:interest_id', function(req, res) {
+app.get('/country/:interest_id', function(req, res) {
 	db.interest_locations.find({interest: req.params.interest_id, type: 'country'}, 'location count', function (err, data) {
 		var returnData = {
 			cols:[{id:"country",label:"Country",type:"string"},
