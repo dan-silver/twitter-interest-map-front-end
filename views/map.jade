@@ -1,0 +1,15 @@
+extends layout
+
+block head
+  script(type="text/javascript", src="http://www.google.com/jsapi")
+  script
+    var interest_id = "#{currentInterest._id}"
+  script(type="text/javascript", src="/javascripts/map.js")
+
+block content
+  h3 Interests:
+  each interest in interests
+   a(href='/' + interest.name + '/map')= interest.name
+  h3 Human Interest in #{currentInterest.name}
+  #visualization
+  button#zoom-out.hide.btn.btn-info(onclick="zoomOut()") Zoom Out

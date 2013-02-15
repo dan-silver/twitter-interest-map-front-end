@@ -1,6 +1,6 @@
 var geochart, data=[], options, zoomLevel, country, state;
     function defaultOptions() {
-      options = {colorAxis: {colors: ['#A6C3FF', '#1D61EE']}, enableRegionInteractivity:true,width: 556, height: 347};
+      options = {colorAxis: {colors: ['#A6C3FF', '#1D61EE']}, enableRegionInteractivity:true,width: 700, height: 500};
     }
     google.load('visualization', '1', {packages: ['geochart']});
     function drawVisualization() {
@@ -36,7 +36,7 @@ var geochart, data=[], options, zoomLevel, country, state;
           location = country
         }
         if (!data[e.region]) {
-          $.get("/510c2bd798df0ab8870010c9/"+type+"/"+location, function(returnedData) {
+          $.get("/"+interest_id+"/"+type+"/"+location, function(returnedData) {
             data[e.region] = new google.visualization.DataTable(returnedData);
             geochart.draw(data[e.region], options);
             console.log(returnedData);
@@ -72,7 +72,7 @@ var geochart, data=[], options, zoomLevel, country, state;
 
 	$(function() {
 		google.setOnLoadCallback(function() {
-			$.get("/510c2bd798df0ab8870010c9", function(returnedData) {
+			$.get("/"+interest_id, function(returnedData) {
 			data['world'] = new google.visualization.DataTable(returnedData);
 		  drawVisualization();
 		 });
