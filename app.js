@@ -30,6 +30,12 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+var countryPercentages = {}
+db.relativePopulation.find(function(err, relativePopulation) {
+  relativePopulation.forEach(function(country) {
+    countryPercentages[country.location] = country.percentage
+  })
+})
 
 //ex http://localhost:3000/510c2bd798df0ab8870010c9/state/US
 app.get('/:interest_id/:type/:location_parent', function(req, res) {
@@ -50,16 +56,22 @@ app.get('/:interest_id/:type/:location_parent', function(req, res) {
 app.get('/explore', routes.explore);
 app.get('/:interest_name/map', routes.map);
 app.get('/country/:interest_id', function(req, res) {
-	db.interest_locations.find({interest: req.params.interest_id, type: 'country'}, 'location count', function (err, data) {
+	db.interest_locations.find({interest: req.params.interest_id, type: 'country'}, 'location location_short count', function (err, data) {
+    var total=0
+    data.forEach(function(country) {
+      total += country.count
+   //   console.log(total)
+    })
 		var returnData = {
 			cols:[{id:"country",label:"Country",type:"string"},
-					  {id:"count",label:"User Count",type:"number"}
+					  {id:"count",label:"Interest Level",type:"number"}
 					 ],
 			 rows:[]
 		};
+//      console.log(countryPercentages['US'])
 		for (var key in data) {
-			var obj = data[key];
-			returnData.rows.push({c:[{v:obj.location},{v:obj.count}]});
+			var obj = data[key]
+			returnData.rows.push({c:[{v:obj.location},{v:(obj.count/total)/countryPercentages[obj.location_short]}]});
 		}
 		res.json(returnData);
 	});
