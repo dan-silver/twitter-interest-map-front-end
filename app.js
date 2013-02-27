@@ -71,7 +71,7 @@ app.get('/country/:interest_id', function(req, res) {
 //      console.log(countryPercentages['US'])
 		for (var key in data) {
 			var obj = data[key]
-			returnData.rows.push({c:[{v:obj.location},{v:(obj.count/total)/countryPercentages[obj.location_short]}]});
+			returnData.rows.push({c:[{v:obj.location},{v:Math.round(100*(obj.count/total)/countryPercentages[obj.location_short])/100}]});
 		}
 		res.json(returnData);
 	});
