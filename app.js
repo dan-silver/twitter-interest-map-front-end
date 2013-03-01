@@ -31,25 +31,42 @@ app.configure('development', function(){
 });
 
 var countryPercentages = {}
-db.relativePopulation.find(function(err, relativePopulation) {
-  relativePopulation.forEach(function(country) {
-    countryPercentages[country.location] = country.percentage
+var US_statePercentages = {}
+getRelativePercentages('country', countryPercentages)
+getRelativePercentages('state', US_statePercentages)
+function getRelativePercentages(type, variable) {
+  db.relativePopulation.find({type: type}, function(err, relativePopulation) {
+    relativePopulation.forEach(function(document) {
+      variable[document.location] = document.percentage
+    })
   })
-})
+}
 
 //ex http://localhost:3000/510c2bd798df0ab8870010c9/state/US
 app.get('/:interest_id/:type/:location_parent', function(req, res) {
   db.interest_locations.find({interest: req.params.interest_id, type: req.params.type, location_parent: req.params.location_parent}, 'location count', function (err, data) {
+    console.log(data)
 		var returnData = {
 			cols:[{id:req.params.type,label:req.params.type,type:"string"},
 					  {id:"count",label:"User Count",type:"number"}
 					 ],
 			 rows:[]
 		};
-		for (var key in data) {
-			var obj = data[key];
-			returnData.rows.push({c:[{v:obj.location},{v:obj.count}]});
-		}
+    if (req.params.location_parent == 'US') {
+      var total=0
+      data.forEach(function(i) {
+        total += i.count
+      })
+      for (var key in data) {
+        var obj = data[key]
+        returnData.rows.push({c:[{v:obj.location},{v:Math.round(100*(obj.count/total)/US_statePercentages[obj.location])/100}]});
+      }
+    } else { // not a US state
+      for (var key in data) {
+        var obj = data[key];
+        returnData.rows.push({c:[{v:obj.location},{v:obj.count}]});
+      }
+    }
 		res.json(returnData);
 	});
 });
@@ -60,7 +77,6 @@ app.get('/country/:interest_id', function(req, res) {
     var total=0
     data.forEach(function(country) {
       total += country.count
-   //   console.log(total)
     })
 		var returnData = {
 			cols:[{id:"country",label:"Country",type:"string"},
@@ -68,7 +84,6 @@ app.get('/country/:interest_id', function(req, res) {
 					 ],
 			 rows:[]
 		};
-//      console.log(countryPercentages['US'])
 		for (var key in data) {
 			var obj = data[key]
 			returnData.rows.push({c:[{v:obj.location},{v:Math.round(100*(obj.count/total)/countryPercentages[obj.location_short])/100}]});
