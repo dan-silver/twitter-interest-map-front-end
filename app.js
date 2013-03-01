@@ -48,7 +48,7 @@ app.get('/:interest_id/:type/:location_parent', function(req, res) {
     console.log(data)
 		var returnData = {
 			cols:[{id:req.params.type,label:req.params.type,type:"string"},
-					  {id:"count",label:"User Count",type:"number"}
+					  {id:"count",label:"Interest Level",type:"number"}
 					 ],
 			 rows:[]
 		};
